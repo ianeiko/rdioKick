@@ -1,0 +1,23 @@
+{
+  "name": "rdioKick",
+  "version": "1.0",
+  "manifest_version": 2,
+
+  "description": "Shows concert dates on a band's Rdio profile",
+
+  "browser_action": {
+    "name": "rdioKick"
+    // "icons": ["icon.png"]
+  },
+
+  "permissions": [
+    "http://www.rdio.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://www.rdio.com/artist/*"],
+      "js": ["js/rdiokick.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
