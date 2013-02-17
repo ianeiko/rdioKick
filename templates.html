@@ -4,22 +4,22 @@
 				Shows
 		 </div>
 		 <div class="InfiniteScroll SourceList" style="">
+     {{#events}}
 			 <div class="scrollable_content">
-				 {{#events}}
-					 <div class="Track clearfix hover_parent no_index has_metadata small_multiline">
-							<div class="info clearfix" style="margin-left: 0">
-								 <div class="name truncated_line">
-										<a href="{{ event_url }}" target='_new'>{{venue_name}}</a>
-								 </div>
-								 <div class="metadata truncated_line">
-									 {{ venue_city }}, {{ venue_state }} on {{event_date}}
-								 </div>
-							</div>
-					 </div>
-				 {{/events}}
-         {{^events}}
-          <p>No upcoming shows.</p>
-         {{/events}}
-		 </div>
+				 <div class="Track clearfix hover_parent no_index has_metadata small_multiline">
+						<div class="info clearfix" style="margin-left: 0">
+							 <div class="name truncated_line">
+									<a href="{{ event_url }}" target='_new'>{{venue_name}}</a>
+							 </div>
+							 <div class="metadata truncated_line">
+								 {{ venue_city }}, {{ venue_state }} on {{event_date}}
+							 </div>
+						</div>
+				 </div>
+		  </div>
+     {{/events}}
+     {{^events}}
+      <p>No upcoming shows.</p>
+     {{/events}}
    </div>
 </script>
