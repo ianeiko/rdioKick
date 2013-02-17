@@ -1,6 +1,6 @@
 {
   "name": "rdioShows",
-  "version": "1.2",
+  "version": "1.3",
   "manifest_version": 2,
 
   "description": "Adds 'Shows' tab to a band's Rdio profile page",
