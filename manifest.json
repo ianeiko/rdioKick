@@ -5,11 +5,6 @@
 
   "description": "Shows concert dates on a band's Rdio profile",
 
-  "browser_action": {
-    "name": "rdioKick"
-    // "icons": ["icon.png"]
-  },
-
   "permissions": [
     "http://www.rdio.com/",
     "http://api.jambase.com/*"
