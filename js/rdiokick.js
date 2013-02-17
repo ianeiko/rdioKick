@@ -133,7 +133,7 @@ app = {
 
   },
   fetchConcertData: function(el) {
-    var artistName = document.location.pathname.match(/\/artist\/(\w*)\//)[1].replace('_', ' '),
+    var artistName = document.location.pathname.match(/\/artist\/([\w-]*)\//)[1].replace('_', ' '),
         encodedArtistName = encodeURIComponent(artistName),
         eventsUrl = 'http://api.jambase.com/search?band='+encodedArtistName+'&apikey=jmnknzgsn9xu3t9upcjrut23',
         req = new XMLHttpRequest(),
