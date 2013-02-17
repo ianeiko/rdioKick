@@ -11,7 +11,8 @@
   },
 
   "permissions": [
-    "http://www.rdio.com/"
+    "http://www.rdio.com/",
+    "http://api.jambase.com/*"
   ],
   "content_scripts": [
     {
