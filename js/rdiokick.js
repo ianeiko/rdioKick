@@ -64,7 +64,6 @@ app = {
 
       if(tab && tab == newTab){
         app.setTabAsActive(newTab, tabContainer);
-        app.fetchConcertData();
       }else if(tab){
         app.restoreTabContent(tabContainer);
       }
@@ -98,6 +97,7 @@ app = {
     newSectionHeader.innerText = 'RdioKick';
     newContent.appendChild(newSectionHeader);
     currentTabContent.parentNode.appendChild(newContent);
+    app.fetchConcertData(newContent);
   },
   restoreTabContent: function(tabContainer){
     var rdioKickContent = document.querySelectorAll('.rdiokick-content')[0];
@@ -122,7 +122,7 @@ app = {
     }
 
   },
-  fetchConcertData: function(){
+  fetchConcertData: function(el){
     var artistName = document.location.pathname.match(/\/artist\/(\w*)\//)[1].replace('_', ' '),
         encodedArtistName = encodeURIComponent(artistName),
         eventsUrl = 'http://api.jambase.com/search?band='+encodedArtistName+'&apikey=jmnknzgsn9xu3t9upcjrut23',
@@ -132,7 +132,7 @@ app = {
     req.onload = function (e) {
       var events = e.target.responseXML.querySelectorAll('event');
       for (var i = 0; i < events.length; i++) {
-        console.log({
+        _event = {
           event_date  : events[i].querySelector('event_date').textContent,
           event_id    : events[i].querySelector('event_url').textContent,
           event_url   : events[i].querySelector('event_id').textContent,
@@ -143,7 +143,8 @@ app = {
           venue_city  : events[i].querySelector('venue_city').textContent,
           venue_state : events[i].querySelector('venue_state').textContent,
           venue_zip   : events[i].querySelector('venue_zip').textContent
-        });
+        }
+        el.innerText += JSON.stringify(_event)
       }
     }
     req.send(null);
