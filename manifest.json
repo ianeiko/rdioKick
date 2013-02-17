@@ -12,7 +12,11 @@
   "content_scripts": [
     {
       "matches": ["http://www.rdio.com/*"],
-      "js": ["js/rdiokick.js"]
+      "js": [
+        "mustache.js",
+        "js/rdiokick.js"
+      ]
     }
-  ]
+  ],
+  "web_accessible_resources": ["templates.html"]
 }

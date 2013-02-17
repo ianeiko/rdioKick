@@ -1,0 +1,22 @@
+<script id="tab_template" type="text/x-template">
+   <div class="centered_content">
+		 <div class="section_header">
+				Concerts
+		 </div>
+		 <div class="InfiniteScroll SourceList" style="">
+			 <div class="scrollable_content">
+				 {{#events}}
+					 <div class="Track clearfix hover_parent no_index has_metadata small_multiline">
+							<div class="info clearfix" style="margin-left: 0">
+								 <div class="name truncated_line">
+										<a href="{{ event_url }}" target='_new'>{{venue_name}} ({{event_date}})</a>
+								 </div>
+								 <div class="metadata truncated_line">
+									 {{ venue_city }}, {{ venue_state }}
+								 </div>
+							</div>
+					 </div>
+				 {{/events}}
+		 </div>
+   </div>
+</script>

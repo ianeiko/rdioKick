@@ -106,7 +106,7 @@ app = {
       newSectionHeader.innerText = 'RdioKick';
       newContent.appendChild(newSectionHeader);
       currentContentContainer.parentNode.appendChild(newContent);
-      app.fetchConcertData(newContent);  
+      app.fetchConcertData(newContent);
     }
   },
   restoreTabContent: function(tabContainer){
@@ -132,30 +132,47 @@ app = {
     }
 
   },
-  fetchConcertData: function(el){
+  fetchConcertData: function(el) {
     var artistName = document.location.pathname.match(/\/artist\/(\w*)\//)[1].replace('_', ' '),
         encodedArtistName = encodeURIComponent(artistName),
         eventsUrl = 'http://api.jambase.com/search?band='+encodedArtistName+'&apikey=jmnknzgsn9xu3t9upcjrut23',
-        req = new XMLHttpRequest();
+        req = new XMLHttpRequest(),
+        getTabContent = function(callback) {
+          var req = new XMLHttpRequest(),
+              el;
+
+          req.open("GET", chrome.extension.getURL('templates.html'), true);
+          req.onload = function(e) {
+            var template;
+            el = document.createElement('div');
+            el.innerHTML = e.target.response;
+            callback(el.querySelectorAll('#tab_template')[0].innerHTML);
+          }
+          req.send(null);
+        };
 
     req.open("GET", eventsUrl, true);
     req.onload = function (e) {
-      var events = e.target.responseXML.querySelectorAll('event');
+      var events = e.target.responseXML.querySelectorAll('event'),
+          result = { events: [] };
+
       for (var i = 0; i < events.length; i++) {
-        _event = {
-          event_date  : (events[i].querySelector('event_date') || {})['event_date'],
-          event_id    : (events[i].querySelector('event_url') || {})['event_url'],
-          event_url   : (events[i].querySelector('event_id') || {})['event_id'],
+        result.events.push({
+          event_date  : (events[i].querySelector('event_date') || {})['textContent'],
+          event_id    : (events[i].querySelector('event_id') || {})['textContent'],
+          event_url   : (events[i].querySelector('event_url') || {})['textContent'],
           artist_name : (events[i].querySelector('artist_name') || {})['textContent'],
-          ticket_url  : (events[i].querySelector('ticket_url') || {})['ticket_url'],
-          venue_id  : (events[i].querySelector('venue_id') || {})['venue_id'],
-          venue_name  : (events[i].querySelector('venue_name') || {})['venue_name'],
-          venue_city  : (events[i].querySelector('venue_city') || {})['venue_city'],
-          venue_state  : (events[i].querySelector('venue_state') || {})['venue_state'],
-          venue_zip  : (events[i].querySelector('venue_zip') || {})['venue_zip']
-        }
-        el.innerText += JSON.stringify(_event)
+          ticket_url  : (events[i].querySelector('ticket_url') || {})['textContent'],
+          venue_id    : (events[i].querySelector('venue_id') || {})['textContent'],
+          venue_name  : (events[i].querySelector('venue_name') || {})['textContent'],
+          venue_city  : (events[i].querySelector('venue_city') || {})['textContent'],
+          venue_state : (events[i].querySelector('venue_state') || {})['textContent'],
+          venue_zip   : (events[i].querySelector('venue_zip') || {})['textContent']
+        });
       }
+      getTabContent(function(template){
+        el.innerHTML = Mustache.render(template, result);
+      });
     }
     req.send(null);
   }
