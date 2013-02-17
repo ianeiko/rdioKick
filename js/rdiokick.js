@@ -114,21 +114,21 @@ app = {
     if(rdioKickContent){
       rdioKickContent.previousElementSibling.style.display = 'block';
       rdioKickContent.parentNode.removeChild(rdioKickContent);
-    }
 
-    var activeTabs = tabContainer.querySelectorAll('.tab.selected');
-    if(activeTabs.length > 0){
-      for (var i = activeTabs.length - 1; i >= 0; i--) {
-        activeTabs[i].classList.remove('selected');
-      };
-    }
+      var activeTabs = tabContainer.querySelectorAll('.tab.selected');
+      if(activeTabs.length > 0){
+        for (var i = activeTabs.length - 1; i >= 0; i--) {
+          activeTabs[i].classList.remove('selected');
+        };
+      }
 
-    var tabsToRestore = tabContainer.querySelectorAll('.tab.not-selected');
-    if(tabsToRestore.length > 0){
-      for (var i = tabsToRestore.length - 1; i >= 0; i--) {
-        tabsToRestore[i].classList.remove('not-selected');
-        tabsToRestore[i].classList.add('selected');
-      };
+      var tabsToRestore = tabContainer.querySelectorAll('.tab.not-selected');
+      if(tabsToRestore.length > 0){
+        for (var i = tabsToRestore.length - 1; i >= 0; i--) {
+          tabsToRestore[i].classList.remove('not-selected');
+          tabsToRestore[i].classList.add('selected');
+        };
+      }
     }
 
   },
