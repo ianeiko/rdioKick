@@ -172,6 +172,9 @@ app = {
           venue_state : (events[i].querySelector('venue_state') || {})['textContent']
         });
       }
+      if(result.events.length > 0){
+        result.showLogo = true;
+      }
       getTabContent(function(template){
         el.innerHTML = Mustache.render(template, result);
       });
