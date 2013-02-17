@@ -88,7 +88,6 @@ app = {
     var contentRoot = tabContainer.parentNode.parentNode.parentNode,
         contentParts = contentRoot.childNodes,
         newContent = document.createElement('div'),
-        newSectionHeader =  document.createElement('div'),
         currentContentContainer;
 
     if(contentParts.length > 0){
@@ -102,9 +101,6 @@ app = {
     if(currentContentContainer){
       currentContentContainer.style.display = 'none';
       newContent.className = 'rdiokick-content';
-      newSectionHeader.className = 'section_header clearfix';
-      newSectionHeader.innerText = 'RdioKick';
-      newContent.appendChild(newSectionHeader);
       currentContentContainer.parentNode.appendChild(newContent);
       app.fetchConcertData(newContent);
     }
@@ -154,20 +150,27 @@ app = {
     req.open("GET", eventsUrl, true);
     req.onload = function (e) {
       var events = e.target.responseXML.querySelectorAll('event'),
-          result = { events: [] };
+          result = { events: [] },
+          monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       for (var i = 0; i < events.length; i++) {
+        var eventDate;
+        if(events[i].querySelector('event_date')){
+          eventDate = new Date(events[i].querySelector('event_date').textContent);
+          eventDate = monthNames[eventDate.getMonth()] + ' ' + eventDate.getDate() + ', ' + eventDate.getFullYear();
+        }
+        
         result.events.push({
-          event_date  : (events[i].querySelector('event_date') || {})['textContent'],
-          event_id    : (events[i].querySelector('event_id') || {})['textContent'],
+          event_date  : eventDate,
+          // event_id    : (events[i].querySelector('event_id') || {})['textContent'],
           event_url   : (events[i].querySelector('event_url') || {})['textContent'],
-          artist_name : (events[i].querySelector('artist_name') || {})['textContent'],
+          // artist_name : (events[i].querySelector('artist_name') || {})['textContent'],
           ticket_url  : (events[i].querySelector('ticket_url') || {})['textContent'],
-          venue_id    : (events[i].querySelector('venue_id') || {})['textContent'],
+          // venue_id    : (events[i].querySelector('venue_id') || {})['textContent'],
+          // venue_zip   : (events[i].querySelector('venue_zip') || {})['textContent'],
           venue_name  : (events[i].querySelector('venue_name') || {})['textContent'],
           venue_city  : (events[i].querySelector('venue_city') || {})['textContent'],
-          venue_state : (events[i].querySelector('venue_state') || {})['textContent'],
-          venue_zip   : (events[i].querySelector('venue_zip') || {})['textContent']
+          venue_state : (events[i].querySelector('venue_state') || {})['textContent']
         });
       }
       getTabContent(function(template){

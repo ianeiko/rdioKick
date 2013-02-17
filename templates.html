@@ -9,14 +9,17 @@
 					 <div class="Track clearfix hover_parent no_index has_metadata small_multiline">
 							<div class="info clearfix" style="margin-left: 0">
 								 <div class="name truncated_line">
-										<a href="{{ event_url }}" target='_new'>{{venue_name}} ({{event_date}})</a>
+										<a href="{{ event_url }}" target='_new'>{{venue_name}}</a>
 								 </div>
 								 <div class="metadata truncated_line">
-									 {{ venue_city }}, {{ venue_state }}
+									 {{ venue_city }}, {{ venue_state }} on {{event_date}}
 								 </div>
 							</div>
 					 </div>
 				 {{/events}}
+         {{^events}}
+          <p>No upcoming concerts.</p>
+         {{/events}}
 		 </div>
    </div>
 </script>
