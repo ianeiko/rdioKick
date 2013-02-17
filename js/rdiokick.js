@@ -29,7 +29,7 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
 app = {
   init: function(){
     document.addEventListener('DOMNodeInserted', function(e){
-      if(!e.target.querySelectorAll){
+      if(!e.target.querySelectorAll || document.location.pathname.indexOf('artist') == -1){
         return;
       }
       var newTabContainers = e.target.querySelectorAll('.tabs');
@@ -52,7 +52,7 @@ app = {
     }
 
     // create and append new tab
-    newLink.innerText = 'Concerts';
+    newLink.innerText = 'Shows';
     newLink.href = '#';
     newTab.className = 'tab rdiokick-tab last';
     newTab.appendChild(newLink);
