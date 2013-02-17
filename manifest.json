@@ -1,13 +1,13 @@
 {
   "name": "rdioShows",
-  "version": "1.1",
+  "version": "1.2",
   "manifest_version": 2,
 
   "description": "Adds 'Shows' tab to a band's Rdio profile page",
   "icons": {
-    "16": "images/logo16.png",
-    "48": "images/logo48.png",
-    "128": "images/logo128.png" 
+    "16": "images/rs16.png",
+    "48": "images/rs48.png",
+    "128": "images/rs128.png" 
   },
 
   "permissions": [
