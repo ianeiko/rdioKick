@@ -11,12 +11,18 @@
   },
 
   "permissions": [
-    "http://www.rdio.com/*"
+    "http://www.rdio.com/*",
+    "http://api.jambase.com/*"
   ],
   "content_scripts": [
     {
       "matches": ["http://www.rdio.com/artist/*"],
-      "js": ["js/rdiokick.js"],
+      "js": [
+        "jquery.js",
+        "xml2json.js",
+        "sugar.js",
+        "js/rdiokick.js"
+      ],
       "run_at": "document_end"
     }
   ]
