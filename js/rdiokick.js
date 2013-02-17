@@ -133,16 +133,16 @@ app = {
       var events = e.target.responseXML.querySelectorAll('event');
       for (var i = 0; i < events.length; i++) {
         _event = {
-          event_date  : events[i].querySelector('event_date').textContent,
-          event_id    : events[i].querySelector('event_url').textContent,
-          event_url   : events[i].querySelector('event_id').textContent,
-          artist_name : events[i].querySelector('artist_name').textContent,
-          ticket_url  : events[i].querySelector('ticket_url').textContent,
-          venue_id    : events[i].querySelector('venue_id').textContent,
-          venue_name  : events[i].querySelector('venue_name').textContent,
-          venue_city  : events[i].querySelector('venue_city').textContent,
-          venue_state : events[i].querySelector('venue_state').textContent,
-          venue_zip   : events[i].querySelector('venue_zip').textContent
+          event_date  : (events[i].querySelector('event_date') || {})['event_date'],
+          event_id    : (events[i].querySelector('event_url') || {})['event_url'],
+          event_url   : (events[i].querySelector('event_id') || {})['event_id'],
+          artist_name : (events[i].querySelector('artist_name') || {})['textContent'],
+          ticket_url  : (events[i].querySelector('ticket_url') || {})['ticket_url'],
+          venue_id  : (events[i].querySelector('venue_id') || {})['venue_id'],
+          venue_name  : (events[i].querySelector('venue_name') || {})['venue_name'],
+          venue_city  : (events[i].querySelector('venue_city') || {})['venue_city'],
+          venue_state  : (events[i].querySelector('venue_state') || {})['venue_state'],
+          venue_zip  : (events[i].querySelector('venue_zip') || {})['venue_zip']
         }
         el.innerText += JSON.stringify(_event)
       }
