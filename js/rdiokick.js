@@ -129,9 +129,8 @@ app = {
 
   },
   fetchConcertData: function(el) {
-    var artistName = document.location.pathname.match(/\/artist\/([\w-]*)\//)[1].replace('_', ' '),
-        encodedArtistName = encodeURIComponent(artistName),
-        eventsUrl = 'http://api.jambase.com/search?band='+encodedArtistName+'&apikey=jmnknzgsn9xu3t9upcjrut23',
+    var artistName = document.location.pathname.match(/\/artist\/([\w%-]*)\//)[1].replace(/_/g, '%20'),
+        eventsUrl = 'http://api.jambase.com/search?band='+artistName+'&apikey=jmnknzgsn9xu3t9upcjrut23',
         req = new XMLHttpRequest(),
         getTabContent = function(callback) {
           var req = new XMLHttpRequest(),
