@@ -85,19 +85,29 @@ app = {
     tab.classList.add('selected');
 
     // hide current tab content
-    var contentRoot = tabContainer.parentNode.parentNode.parentNode;
-      sectionHeader = contentRoot.querySelectorAll('.section_header')[0],
-      currentTabContent = sectionHeader.parentNode,
-      newContent = document.createElement('div'),
-      newSectionHeader =  document.createElement('div');
+    var contentRoot = tabContainer.parentNode.parentNode.parentNode,
+        contentParts = contentRoot.childNodes,
+        newContent = document.createElement('div'),
+        newSectionHeader =  document.createElement('div'),
+        currentContentContainer;
 
-    currentTabContent.style.display = 'none';
-    newContent.className = 'rdiokick-content';
-    newSectionHeader.className = 'section_header clearfix';
-    newSectionHeader.innerText = 'RdioKick';
-    newContent.appendChild(newSectionHeader);
-    currentTabContent.parentNode.appendChild(newContent);
-    app.fetchConcertData(newContent);
+    if(contentParts.length > 0){
+      for (var i = contentParts.length - 1; i >= 0; i--) {
+        if(contentParts[i] && contentParts[i].classList && contentParts[i].classList.contains('centered_content')){
+          currentContentContainer = contentParts[i];
+        }
+      };
+    }
+
+    if(currentContentContainer){
+      currentContentContainer.style.display = 'none';
+      newContent.className = 'rdiokick-content';
+      newSectionHeader.className = 'section_header clearfix';
+      newSectionHeader.innerText = 'RdioKick';
+      newContent.appendChild(newSectionHeader);
+      currentContentContainer.parentNode.appendChild(newContent);
+      app.fetchConcertData(newContent);  
+    }
   },
   restoreTabContent: function(tabContainer){
     var rdioKickContent = document.querySelectorAll('.rdiokick-content')[0];
