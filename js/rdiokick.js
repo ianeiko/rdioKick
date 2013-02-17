@@ -1,22 +1,48 @@
+goog = {};
+goog.dom = {};
+goog.dom.getAncestor = function(
+    element, matcher, opt_includeNode, opt_maxSearchSteps) {
+  if (!opt_includeNode) {
+    element = element.parentNode;
+  }
+  var ignoreSearchSteps = opt_maxSearchSteps == null;
+  var steps = 0;
+  while (element && (ignoreSearchSteps || steps <= opt_maxSearchSteps)) {
+    if (matcher(element)) {
+      return element;
+    }
+    element = element.parentNode;
+    steps++;
+  }
+  // Reached the root of the DOM without a match
+  return null;
+};
+goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
+  var tagName = opt_tag ? opt_tag.toUpperCase() : null;
+  return goog.dom.getAncestor(element,
+      function(node) {
+        return (!tagName || node.nodeName == tagName) &&
+               (!opt_class || (node.classList && node.classList.contains(opt_class)));
+      }, true);
+};
+
 app = {
 	init: function(){
-		var poll = function(){
-			try{
-				var tabContainer = document.querySelectorAll('.tabs')[0]
-				
-				if(tabContainer.innerHTML){ // poll until DOM is ready
-					app.createTabs(tabContainer);
-				}
-			}catch(e){
-				setTimeout(function(){
-					poll();
-				}, 1000);
+		document.addEventListener('DOMNodeInserted', function(e){
+			if(!e.target.querySelectorAll){
+				return;
 			}
-		}
-		poll();
+			var newTabContainers = e.target.querySelectorAll('.tabs');
+			if(newTabContainers && newTabContainers.length > 0){
+				var rdioTab = newTabContainers[0].querySelectorAll('.rdiokick-tab');
+					if(rdioTab.length < 1){
+						app.createTabs(newTabContainers[0]);
+					}
+			}
+		});
 	},
 	createTabs: function(tabContainer){
-		var lastTab = document.querySelectorAll('.tabs .tab.last')[0],
+		var lastTab = tabContainer.querySelectorAll('.tab.last')[0],
 			newTab = document.createElement('div'),
 			newLink = document.createElement('a');
 
@@ -28,15 +54,73 @@ app = {
 		// create and append new tab
 		newLink.innerText = 'Concerts';
 		newLink.href = '#';
-		newTab.className = 'tab last';
+		newTab.className = 'tab rdiokick-tab last';
 		newTab.appendChild(newLink);
 		tabContainer.appendChild(newTab);
-		
-		// listen for clicks
-		newLink.addEventListener('click', function(e){
-			app.fetchConcertData();
+
+		// listen for tab clicks
+		tabContainer.addEventListener('click', function(e){
+			var tab = goog.dom.getAncestorByTagNameAndClass(e.target, null, 'tab');
+
+			if(tab && tab == newTab){
+				app.setTabAsActive(newTab, tabContainer);
+				app.fetchConcertData();	
+			}else if(tab){
+				app.restoreTabContent(tabContainer);
+			}
 			return false;
 		});
+	},
+	setTabAsActive: function(tab, tabContainer){
+		// update nav item
+		var activeTabs = tabContainer.querySelectorAll('.tab.selected');
+		if(activeTabs.length > 0){
+			for (var i = activeTabs.length - 1; i >= 0; i--) {
+				if(activeTabs[i].classList.contains('selected')){
+					activeTabs[i].classList.remove('selected');
+					activeTabs[i].classList.add('not-selected');	
+				}
+			};
+		}
+
+		tab.classList.add('selected');
+
+		// hide current tab content
+		var contentRoot = tabContainer.parentNode.parentNode.parentNode;
+			sectionHeader = contentRoot.querySelectorAll('.section_header')[0],
+			currentTabContent = sectionHeader.parentNode,
+			newContent = document.createElement('div'),
+			newSectionHeader =  document.createElement('div');
+
+		currentTabContent.style.display = 'none';
+		newContent.className = 'rdiokick-content';
+		newSectionHeader.className = 'section_header clearfix';
+		newSectionHeader.innerText = 'RdioKick';
+		newContent.appendChild(newSectionHeader);
+		currentTabContent.parentNode.appendChild(newContent);
+	},
+	restoreTabContent: function(tabContainer){
+		var rdioKickContent = document.querySelectorAll('.rdiokick-content')[0];
+		if(rdioKickContent){
+			rdioKickContent.previousElementSibling.style.display = 'block';
+			rdioKickContent.parentNode.removeChild(rdioKickContent);	
+		}
+
+		var activeTabs = tabContainer.querySelectorAll('.tab.selected');
+		if(activeTabs.length > 0){
+			for (var i = activeTabs.length - 1; i >= 0; i--) {
+				activeTabs[i].classList.remove('selected');
+			};
+		}
+
+		var tabsToRestore = tabContainer.querySelectorAll('.tab.not-selected');
+		if(tabsToRestore.length > 0){
+			for (var i = tabsToRestore.length - 1; i >= 0; i--) {
+				tabsToRestore[i].classList.remove('not-selected');
+				tabsToRestore[i].classList.add('selected');
+			};
+		}
+		
 	},
 	fetchConcertData: function(){
 		// use document.location.pathname to get artist's name

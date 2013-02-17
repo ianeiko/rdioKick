@@ -11,13 +11,12 @@
   },
 
   "permissions": [
-    "http://www.rdio.com/*"
+    "http://www.rdio.com/"
   ],
   "content_scripts": [
     {
-      "matches": ["http://www.rdio.com/artist/*"],
-      "js": ["js/rdiokick.js"],
-      "run_at": "document_end"
+      "matches": ["http://www.rdio.com/*"],
+      "js": ["js/rdiokick.js"]
     }
   ]
 }
